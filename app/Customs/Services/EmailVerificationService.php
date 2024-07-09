@@ -32,20 +32,22 @@ class EmailVerificationService {
         ]);
     }
 
-    // FIXME: the verify correctly the token
     public function verify_token(string $email, string $token) {
         $token = EmailVerificationToken::where("email", $email)->where("token", $token)->first();
         if (!$token) {
-            return response()->json([
+            response()->json([
                 "status" => "failed",
                 "message" => "Invalid token"
-            ]);
+            ])->send();
+            exit;
         }
         if ($token->expired_at <= now()) {
-            return response()->json([
+            $token->delete();
+            response()->json([
                 "status" => "failed",
                 "message" => "Token expired"
-            ]);
+            ])->send();
+            exit;
         }
         return $token;
     }
@@ -59,7 +61,6 @@ class EmailVerificationService {
         }
     }
 
-    // FIXME: not pass the validations
     public function verify_email(string $email, string $token) {
         $user = User::where("email", $email)->first();
         if (!$user) {
