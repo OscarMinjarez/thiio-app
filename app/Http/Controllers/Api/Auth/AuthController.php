@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Customs\Services\EmailVerificationService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
@@ -10,6 +11,10 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    public function __construct(private EmailVerificationService $emailVerificationService) {
+        
+    }
+
     /**
      * Login method
      */
@@ -35,6 +40,7 @@ class AuthController extends Controller
                 "message" => "An error ocurre while trying to create user"
             ], 500);
         }
+        $this->emailVerificationService->send_verification_link($user);
         $token = auth()->login($user);
         return $this->response_with_token($token, $user);
     }
