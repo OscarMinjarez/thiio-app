@@ -54,10 +54,11 @@ class EmailVerificationService {
 
     public function check_verified_email(object $user) {
         if ($user->email_verified_at) {
-            return response()->json([
+            response()->json([
                 "status" => "failed",
                 "message" => "Email has already verified"
-            ]);
+            ])->send();
+            exit;
         }
     }
 
