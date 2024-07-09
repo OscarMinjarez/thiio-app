@@ -6,6 +6,8 @@ use App\Customs\Services\EmailVerificationService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\ResendEmailVerificationRequest;
+use App\Http\Requests\VerifyEmailRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -15,9 +17,6 @@ class AuthController extends Controller
         
     }
 
-    /**
-     * Login method
-     */
     public function login(LoginRequest $request) {
         $token = auth()->attempt($request->validated());
         if (!$token) {
@@ -29,9 +28,6 @@ class AuthController extends Controller
         return $this->response_with_token($token, auth()->user());
     }
 
-    /**
-     * Register method
-     */
     public function register(RegisterRequest $request) {
         $user = User::create($request->validated());
         if (!$user) {
@@ -52,5 +48,13 @@ class AuthController extends Controller
             "access_token" => $token,
             "type" => "bearer"
         ]);
+    }
+
+    public function verify_user_email(VerifyEmailRequest $request) {
+        return $this->emailVerificationService->verify_email($request->email, $request->token);
+    }
+
+    public function resend_email_verification_link(ResendEmailVerificationRequest $request) {
+        return $this->emailVerificationService->resend_link($request->email);
     }
 }
