@@ -10,6 +10,7 @@ use App\Http\Requests\ResendEmailVerificationRequest;
 use App\Http\Requests\VerifyEmailRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -56,5 +57,13 @@ class AuthController extends Controller
 
     public function resend_email_verification_link(ResendEmailVerificationRequest $request) {
         return $this->email_verification_service->resend_link($request->email);
+    }
+
+    public function logout() {
+        Auth::logout();
+        return response()->json([
+            "status" => "success",
+            "message" => "User has been logged successfully"
+        ]);
     }
 }
