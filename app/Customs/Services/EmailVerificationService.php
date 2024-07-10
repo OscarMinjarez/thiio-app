@@ -32,7 +32,7 @@ class EmailVerificationService {
         ]);
     }
 
-    public function verify_token(string $email, string $token) {
+    private function verify_token(string $email, string $token) {
         $token = EmailVerificationToken::where("email", $email)->where("token", $token)->first();
         if (!$token) {
             response()->json([
@@ -52,7 +52,7 @@ class EmailVerificationService {
         return $token;
     }
 
-    public function check_verified_email(object $user) {
+    private function check_verified_email(object $user) {
         if ($user->email_verified_at) {
             response()->json([
                 "status" => "failed",
@@ -85,7 +85,7 @@ class EmailVerificationService {
         ]);
     }
 
-    public function generate_verification_link(string $email): string {
+    private function generate_verification_link(string $email): string {
         $check_token_exists = EmailVerificationToken::where("email", $email)->first();
         if ($check_token_exists) {
             $check_token_exists->delete();
