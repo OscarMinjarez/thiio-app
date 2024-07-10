@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function __construct(private EmailVerificationService $emailVerificationService) {
+    public function __construct(private EmailVerificationService $email_verification_service) {
         
     }
 
@@ -36,7 +36,7 @@ class AuthController extends Controller
                 "message" => "An error ocurre while trying to create user"
             ], 500);
         }
-        $this->emailVerificationService->send_verification_link($user);
+        $this->email_verification_service->send_verification_link($user);
         $token = auth()->login($user);
         return $this->response_with_token($token, $user);
     }
@@ -51,10 +51,10 @@ class AuthController extends Controller
     }
 
     public function verify_user_email(VerifyEmailRequest $request) {
-        return $this->emailVerificationService->verify_email($request->email, $request->token);
+        return $this->email_verification_service->verify_email($request->email, $request->token);
     }
 
     public function resend_email_verification_link(ResendEmailVerificationRequest $request) {
-        return $this->emailVerificationService->resend_link($request->email);
+        return $this->email_verification_service->resend_link($request->email);
     }
 }
