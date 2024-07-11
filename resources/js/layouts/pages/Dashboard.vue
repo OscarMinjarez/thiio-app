@@ -1,3 +1,7 @@
 <template>
-    <h1>Hello Dashboard</h1>
+    <DashboardContent></DashboardContent>
 </template>
+
+<script setup>
+import DashboardContent from "../components/DashboardContent.vue";
+</script>
