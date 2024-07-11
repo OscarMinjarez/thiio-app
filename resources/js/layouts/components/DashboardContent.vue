@@ -22,7 +22,7 @@
         <v-container class="pa-0">
             <v-row>
                 <v-col>
-                    <UsersTable></UsersTable>
+                    <UsersTable :users="users"></UsersTable>
                 </v-col>
             </v-row>
         </v-container>
@@ -30,5 +30,19 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
 import UsersTable from "./UsersTable.vue";
+import UsersService from "../../services/UsersService";
+
+const users = ref([]);
+const usersService = new UsersService();
+
+onMounted(async () => {
+    try {
+        const response = await usersService.getUsers();
+        users.value = response;
+    } catch (e) {
+        console.error(e);
+    }
+});
 </script>
