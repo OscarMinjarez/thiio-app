@@ -84,7 +84,6 @@ const login = () => {
             password: password.value
         };
         authService.login(user);
-        location.href = "/dashboard";
         return;
     }
     console.log("Form is invalid");

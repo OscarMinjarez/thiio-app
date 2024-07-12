@@ -10,9 +10,9 @@ export default class UsersService {
     getUsers = async () => {
         try {
             const response = await this.httpClient.get("api/users", {
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
+                "Authorization": `Bearer ${sessionStorage.getItem("token")}`
             });
-            return response.users;
+            return await response.users;
         } catch (e) {
             console.error(e);   
         }

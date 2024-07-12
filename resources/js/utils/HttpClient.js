@@ -4,6 +4,10 @@ export default class HttpClient {
         this.BASE_URL = BASE_URL;
     }
 
+    redirect = (url) => {
+        location.href = `/${url}`;
+    }
+
     request = async (url, method, data = null, headers = {}) => {
         const options = {
             method,

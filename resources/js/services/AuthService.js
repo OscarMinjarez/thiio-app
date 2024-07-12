@@ -10,8 +10,11 @@ export default class AuthService {
     login = async (user) => {
         try {
             const response = await this.httpClient.post(`api/auth/login`, user);
-            localStorage.setItem("token", response.access_token);
-            return response.user;
+            sessionStorage.setItem("id", response.user.id);
+            sessionStorage.setItem("user", response.user.name);
+            sessionStorage.setItem("email", response.user.email);
+            sessionStorage.setItem("token", response.access_token);
+            this.httpClient.redirect("dashboard");
         } catch (e) {
             console.error(e);
         }
