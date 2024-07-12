@@ -19,4 +19,16 @@ export default class AuthService {
             console.error(e);
         }
     }
+
+    logout = async () => {
+        try {
+            await this.httpClient.post("api/auth/logout", null, {
+                "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+            });
+            sessionStorage.clear();
+            this.httpClient.redirect("home");
+        } catch (e) {
+            console.error(e);
+        }
+    }
 }
