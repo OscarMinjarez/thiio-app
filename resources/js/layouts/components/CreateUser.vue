@@ -19,7 +19,7 @@
                 title="Create user"
             >
                 <v-card-text>
-                    <v-form>
+                    <v-form ref="form">
                         <v-row dense>
                             <v-col>
                                 <v-text-field
@@ -77,6 +77,15 @@
                     </v-form>
                 </v-card-text>
 
+                <v-alert
+                    v-if="errorMessage"
+                    type="error"
+                    dismissible
+                    class="my-3"
+                >
+                    {{ errorMessage }}
+                </v-alert>
+
                 <v-divider></v-divider>
 
                 <v-card-actions>
@@ -91,7 +100,7 @@
                     <v-btn
                         text="Save"
                         variant="tonal"
-                        @click="dialog = false"
+                        @click="register()"
                     ></v-btn>
                 </v-card-actions>
 
@@ -102,13 +111,23 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import AuthService from "../../services/AuthService";
+
+const router = useRouter();
+const authService = new AuthService(router);
 
 const dialog = ref(false);
 
-const name = ref(null);
-const email = ref(null);
-const password = ref(null);
-const confirmPassword = ref(null);
+const name = ref("");
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+
+const form = ref(null);
+const visible = ref(false);
+
+const errorMessage = ref("");
 
 const rules = {
     required: value => !!value || "Required",
@@ -117,4 +136,21 @@ const rules = {
         return pattern.test(value) || 'Invalid email.';
     }
 };
+
+const register = async () => {
+    errorMessage.value = "";
+    if (form.value.validate()) {
+        const newUser = {
+            name: name.value,
+            email: email.value,
+            password: password.value,
+            password_confirmation: confirmPassword.value
+        };
+        try {
+            await authService.register(newUser);
+        } catch (e) {
+            errorMessage.value = e.message.replace(/^Error: /, "").replace(/^Error: /, "");
+        }
+    }
+}
 </script>

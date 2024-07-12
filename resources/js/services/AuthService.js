@@ -17,10 +17,10 @@ export default class AuthService {
                 sessionStorage.setItem("token", response.access_token);
                 this.httpClient.redirect("dashboard");
             } else {
-                throw new Error('Login failed');
+                throw new Error("Login failed");
             }
         } catch (e) {
-            throw new Error('Invalid credentials');
+            throw new Error("Invalid credentials");
         }
     }
 
@@ -32,7 +32,22 @@ export default class AuthService {
             sessionStorage.clear();
             this.httpClient.redirect("home");
         } catch (e) {
-            throw Error(e);
+            throw new Error(e);
+        }
+    }
+
+    register = async (newUser) => {
+        try {
+            const response = await this.httpClient.post(`api/auth/register`, newUser, {
+                "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+            });
+            if (response.errors) {
+                const errorKey = Object.keys(response.errors)[0];
+                const errorMessage = response.errors[errorKey][0];
+                throw new Error(errorMessage);
+            }
+        } catch (e) {
+            throw new Error(e);
         }
     }
 }
