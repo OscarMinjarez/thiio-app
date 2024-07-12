@@ -32,6 +32,15 @@
                     :rules="[rules.required]"
                 ></v-text-field>
             </v-form>
+
+            <v-alert
+                v-if="errorMessage"
+                type="error"
+                dismissible
+                class="my-3"
+            >
+                {{ errorMessage }}
+            </v-alert>
     
             <v-btn
                 class="my-3"
@@ -59,15 +68,19 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import AuthService from "../../services/AuthService";
 
-const authService = new AuthService();
+const router = useRouter();
+const authService = new AuthService(router);
 
 const form = ref(null);
 const visible = ref(false);
 
 const email = ref("");
 const password = ref("");
+
+const errorMessage = ref("");
 
 const rules = {
     required: value => !!value || "Required",
@@ -77,13 +90,18 @@ const rules = {
     }
 };
 
-const login = () => {
+const login = async () => {
+    errorMessage.value = "";
     if (form.value.validate()) {
         const user = {
             email: email.value,
             password: password.value
         };
-        authService.login(user);
+        try {
+            await authService.login(user);
+        } catch (e) {
+            errorMessage.value = "Invalid credentials. Please try again.";
+        }
         return;
     }
     console.log("Form is invalid");

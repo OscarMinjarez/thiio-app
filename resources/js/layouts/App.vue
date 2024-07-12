@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <SideBar v-if="shouldShowSidebar"></SideBar>
-        <Navbar></Navbar>
+        <Navbar v-if="shouldShowSidebar"></Navbar>
         <v-main>
             <router-view></router-view>
         </v-main>

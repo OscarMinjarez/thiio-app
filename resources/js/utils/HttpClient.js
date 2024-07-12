@@ -1,11 +1,12 @@
 export default class HttpClient {
 
-    constructor(BASE_URL) {
+    constructor(BASE_URL, router) {
         this.BASE_URL = BASE_URL;
+        this.router = router;
     }
 
     redirect = (url) => {
-        location.href = `/${url}`;
+        this.router.push(`/${url}`);
     }
 
     request = async (url, method, data = null, headers = {}) => {
