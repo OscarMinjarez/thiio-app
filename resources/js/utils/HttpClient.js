@@ -8,6 +8,7 @@ export default class HttpClient {
         const options = {
             method,
             headers: {
+                "Accept": "application/json",
                 "Content-Type": "application/json",
                 ...headers
             }

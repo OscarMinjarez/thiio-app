@@ -2,16 +2,16 @@
     <v-table fixed-header class="border-thin">
         <thead>
             <tr>
-                <th class="text-left">
+                <th class="text-left font-weight-bold">
                     User name
                 </th>
-                <th class="text-left">
+                <th class="text-left font-weight-bold">
                     Email
                 </th>
-                <th class="text-center">
+                <th class="text-center font-weight-bold">
                     Verified
                 </th>
-                <th class="text-center v-col-2">
+                <th class="text-center v-col-2 font-weight-bold">
                     Action
                 </th>
             </tr>
